@@ -299,7 +299,9 @@ void
 SVineStructureSelector::add_allowed_connections(VineTree& tree, size_t t)
 {
   auto add_edge = [&tree, this](size_t v0, size_t v1) {
-    auto crit = std::fabs(wdm::wdm(get_pc_data(v0, v1, tree), "kendall")(0, 1));
+    double crit = calculate_criterion(get_pc_data(v0, v1, tree),
+                                  controls_.get_tree_criterion(),
+                                  controls_.get_weights());
     auto w = 1 - crit;
     auto e = boost::add_edge(v0, v1, w, tree).first;
     tree[e].weight = w;
